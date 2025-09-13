@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { success } from "zod";
 
 export async function updateUser(data) {
   const { userId } = await auth();
@@ -59,10 +60,10 @@ export async function updateUser(data) {
         timeout: 10000,
       }
     );
-    return result.updatedUser;
+    return {success:true, ...result}
   } catch (error) {
-    console.error("Error updating user and industry:", error);
-    throw new Error("Failed to update profile");
+    console.error("Error updating user and industry:", error.messa);
+    throw new Error("Failed to update profile"+error.message);
   }
 }
 export async function getUserOnboardingStatus() {
